@@ -16,12 +16,20 @@ type Service struct {
 
 type Client struct {
 	Name                 string
-	Ipaddress            string
+	IPAddress            string
 	lastConnection       time.Time
 	LastConnectionParsed string
-	Services             []Service
+	Services             []Service // Clients should be another service so we don't have to worry about copying embedded stuff
 }
 
+/*
+	c = Client{
+		Name: comment,
+		Ipaddress: conn
+	}
+
+globalState.UpdateClient(c)
+*/
 type systemState struct {
 	clients map[string]*Client
 	mutex   sync.RWMutex
@@ -39,11 +47,19 @@ func NewSystemState() *systemState {
 func (ss *systemState) UpdateClient(uC Client) { // this isn't good enough We need to unmarshall json
 	ss.mutex.Lock()
 	defer ss.mutex.Unlock()
-	ss.clients[uC.Name] = &uC
-	copy(uC.Services, ss.clients[uC.Name].Services)
-	ss.clients[uC.Name].lastConnection = time.Now()
+	if _, ok := ss.clients[uC.Name]; !ok {
+		if uC.Services == nil {
+			uC.Services = make([]Service, 0)
+		}
+		ss.clients[uC.Name] = &uC
+
+	} else {
+		ss.clients[uC.Name].lastConnection = time.Now()
+		ss.clients[uC.Name].IPAddress = uC.IPAddress
+	}
 }
 
+// TODO: add service
 func (ss *systemState) GetClientsCopy() []Client {
 	ss.mutex.RLock()
 	defer ss.mutex.RUnlock()
