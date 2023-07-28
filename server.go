@@ -39,6 +39,11 @@ func ServeWSConn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defaultLogger.Info("Welcome, " + sshconn.Permissions.Extensions["comment"])
+	c := Client{
+		Name:      sshconn.Permissions.Extensions["comment"],
+		IPAddress: sshconn.RemoteAddr().String(),
+	}
+	globalState.UpdateClient(c)
 	go ReadTexts(wsconn)
 	go ssh.DiscardRequests(reqs)
 	for _ = range chans {
