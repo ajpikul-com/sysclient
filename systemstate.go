@@ -63,7 +63,7 @@ func (ss *systemState) UpdateService(client string, service string, status bool,
 func (ss *systemState) UpdateTime(client string) {
 	ss.mutex.Lock()
 	defer ss.mutex.Unlock()
-	ss.clients[uC.Name].lastConnection = time.Now()
+	ss.clients[client].lastConnection = time.Now()
 }
 
 // TODO: add service
