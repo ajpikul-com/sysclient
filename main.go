@@ -64,8 +64,11 @@ func writeSystemStatus(w http.ResponseWriter, r *http.Request) {
 	}
 	payload.PossibleClients = globalClientList.GetAllClients()
 	payload.ConnectedClients = globalState.GetClientsCopy()
+	for i, v := range payload.ConnectedClients {
+		payload.ConnectedClients[i].LastConnectionParsed = time.Since(v.lastConnection).String()
+	}
 	jsonWrite := json.NewEncoder(w)
 	jsonWrite.SetEscapeHTML(true)
-	jsonWrite.Encode(payload) // TODO doesn't work not sure why
+	jsonWrite.Encode(payload)
 	w.(http.Flusher).Flush()
 }
