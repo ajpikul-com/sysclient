@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"net/http"
 	"time"
 
@@ -35,6 +36,7 @@ func main() {
 	// Add two gets here. Why are we using mux? I don't know
 	m.HandleFunc("/", ServeWSConn)
 	m.HandleFunc("/status", func(http.ResponseWriter, *http.Request) {})
+	m.HandleFunc("/sysstatus", writeSystemStatus)
 	s := &http.Server{
 		Addr:           globalConfig.Hostname,
 		Handler:        m,
@@ -49,4 +51,14 @@ func main() {
 		defaultLogger.Error("http.Server.ListenAndServe: " + err.Error())
 	}
 	defaultLogger.Info("Server exiting")
+}
+
+func writeSystemStatus(w http.ResponseWriter, r *http.Request) {
+	availableClients := globalClientList.GetAllClients()
+	connectedClients := globalState.GetClientsCopy()
+	_ = connectedClients
+	jsonWrite := json.NewEncoder(w)
+	jsonWrite.SetEscapeHTML(true)
+	jsonWrite.Encode(availableClients)
+	w.(http.Flusher).Flush()
 }
