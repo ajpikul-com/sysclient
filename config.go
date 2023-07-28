@@ -13,8 +13,13 @@ type config struct {
 
 // b, err := json.Marshal(instance of config)
 var globalConfig config
+var globalState *systemState
+var globalClientList *clientList
 
 func initConfig() {
+	globalState = NewSystemState()
+	globalClientList = NewClientList([]string{})
+	// globalClientList = NewClientList() // We actually don't know yet
 	configFile, err := os.Open("/home/ajp/systems/ajpikul.com_system/configs/sysboss.json")
 	if err != nil {
 		panic(err.Error())
