@@ -34,6 +34,7 @@ func main() {
 	m := mux.NewRouter()
 	// Add two gets here. Why are we using mux? I don't know
 	m.HandleFunc("/", ServeWSConn)
+	m.HandleFunc("/status", func(http.ResponseWriter, *http.Request) {})
 	s := &http.Server{
 		Addr:           globalConfig.Hostname,
 		Handler:        m,
