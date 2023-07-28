@@ -17,15 +17,19 @@ func GetServer(wsconn *wsconn.WSConn, clients string, privateKey string) (*ssh.S
 		panic("Failed to load auth keys file " + err.Error())
 	}
 	authorizedKeysMap := map[string]string{}
+	// TODO this really shouldn't be here
+	possibleClients := make([]string, 0)
+	//
 	for len(authorizedKeysBytes) > 0 {
 		pubKey, comment, _, rest, err := ssh.ParseAuthorizedKey(authorizedKeysBytes)
 		if err != nil {
 			panic(err.Error())
 		}
 		authorizedKeysMap[string(pubKey.Marshal())] = comment
+		possibleClients = append(possibleClients, comment)
 		authorizedKeysBytes = rest
 	}
-
+	globalClientList.UpdateClientList(possibleClients)
 	config := &ssh.ServerConfig{
 		PublicKeyCallback: func(c ssh.ConnMetadata, pubKey ssh.PublicKey) (*ssh.Permissions, error) {
 			defaultLogger.Debug("Running Public Key Callback")
