@@ -54,11 +54,18 @@ func main() {
 }
 
 func writeSystemStatus(w http.ResponseWriter, r *http.Request) {
-	availableClients := globalClientList.GetAllClients()
-	connectedClients := globalState.GetClientsCopy()
-	_ = connectedClients
+	// If r.Method = GET/POST
+	payload := struct {
+		PossibleClients  []string
+		ConnectedClients []Client
+	}{
+		PossibleClients:  nil,
+		ConnectedClients: nil,
+	}
+	payload.PossibleClients = globalClientList.GetAllClients()
+	payload.ConnectedClients = globalState.GetClientsCopy()
 	jsonWrite := json.NewEncoder(w)
 	jsonWrite.SetEscapeHTML(true)
-	jsonWrite.Encode(availableClients)
+	jsonWrite.Encode(payload) // TODO doesn't work not sure why
 	w.(http.Flusher).Flush()
 }
