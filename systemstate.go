@@ -19,17 +19,9 @@ type Client struct {
 	IPAddress            string
 	lastConnection       time.Time
 	LastConnectionParsed string
-	Services             []Service // Clients should be another service so we don't have to worry about copying embedded stuff
+	Services             map[string]Service // Clients should be another service so we don't have to worry about copying embedded stuff
 }
 
-/*
-	c = Client{
-		Name: comment,
-		Ipaddress: conn
-	}
-
-globalState.UpdateClient(c)
-*/
 type systemState struct {
 	clients map[string]*Client
 	mutex   sync.RWMutex
@@ -49,14 +41,29 @@ func (ss *systemState) UpdateClient(uC Client) { // this isn't good enough We ne
 	defer ss.mutex.Unlock()
 	if _, ok := ss.clients[uC.Name]; !ok {
 		if uC.Services == nil {
-			uC.Services = make([]Service, 0)
+			uC.Services = make(map[string]Service)
 		}
 		ss.clients[uC.Name] = &uC
-
 	} else {
-		ss.clients[uC.Name].lastConnection = time.Now()
 		ss.clients[uC.Name].IPAddress = uC.IPAddress
 	}
+	ss.clients[uC.Name].lastConnection = time.Now() // This needs to be called on any communication
+}
+
+func (ss *systemState) UpdateService(client string, service string, status bool, time time.Time) {
+	ss.mutex.Lock()
+	defer ss.mutex.Unlock()
+	ss.clients[client].Services[service] = Service{
+		Name:           service,
+		Status:         status,
+		lastConnection: time,
+	}
+}
+
+func (ss *systemState) UpdateTime(client string) {
+	ss.mutex.Lock()
+	defer ss.mutex.Unlock()
+	ss.clients[uC.Name].lastConnection = time.Now()
 }
 
 // TODO: add service
@@ -67,7 +74,9 @@ func (ss *systemState) GetClientsCopy() []Client {
 	i := 0
 	for _, v := range ss.clients {
 		clients[i] = *v
-		copy(v.Services, clients[i].Services)
+		for k2, v2 := range v.Services {
+			clients[i].Services[k2] = v2
+		}
 	}
 	return clients
 }
