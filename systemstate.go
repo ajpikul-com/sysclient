@@ -7,49 +7,51 @@ import (
 	"time"
 )
 
-type service struct {
-	name           string
-	status         bool
-	lastConnection time.Time
+type Service struct {
+	Name                 string
+	Status               bool
+	lastConnection       time.Time
+	LastConnectionParsed string
 }
 
-type client struct {
-	name           string
-	ipaddress      string
-	lastConnection time.Time
-	services       []service
+type Client struct {
+	Name                 string
+	Ipaddress            string
+	lastConnection       time.Time
+	LastConnectionParsed string
+	Services             []Service
 }
 
 type systemState struct {
-	clients map[string]*client
+	clients map[string]*Client
 	mutex   sync.RWMutex
 }
 
 func NewSystemState() *systemState {
 	ss := &systemState{
-		clients: make(map[string]*client),
+		clients: make(map[string]*Client),
 	}
 	return ss
 }
 
 // Here's a problem, I don't want anyone to have direct access to any member
 // It's all mutexed. So assignments generally copy, but not always. Gotta remember to make sure it copies. or "deep copies"
-func (ss *systemState) UpdateClient(uC client) { // this isn't good enough We need to unmarshall json
+func (ss *systemState) UpdateClient(uC Client) { // this isn't good enough We need to unmarshall json
 	ss.mutex.Lock()
 	defer ss.mutex.Unlock()
-	ss.clients[uC.name] = &uC
-	copy(uC.services, ss.clients[uC.name].services)
-	ss.clients[uC.name].lastConnection = time.Now()
+	ss.clients[uC.Name] = &uC
+	copy(uC.Services, ss.clients[uC.Name].Services)
+	ss.clients[uC.Name].lastConnection = time.Now()
 }
 
-func (ss *systemState) GetClientsCopy() []client {
+func (ss *systemState) GetClientsCopy() []Client {
 	ss.mutex.RLock()
 	defer ss.mutex.RUnlock()
-	clients := make([]client, len(ss.clients))
+	clients := make([]Client, len(ss.clients))
 	i := 0
 	for _, v := range ss.clients {
 		clients[i] = *v
-		copy(v.services, clients[i].services)
+		copy(v.Services, clients[i].Services)
 	}
 	return clients
 }
