@@ -66,17 +66,10 @@ func main() {
 
 func writeSystemStatus(w http.ResponseWriter, r *http.Request) {
 	// If r.Method = GET/POST
-	payload := struct {
-		ExpectedClients  []string
-		ConnectedClients []Service
-	}{
-		ExpectedClients:  nil,
-		ConnectedClients: nil,
-	}
-	payload.ExpectedClients = globalState.GetAllClients()
-	payload.ConnectedClients = globalState.GetServices()
 	jsonWrite := json.NewEncoder(w)
 	jsonWrite.SetEscapeHTML(true)
-	jsonWrite.Encode(payload)
+	globalState.ReadLock()
+	jsonWrite.Encode(globalState)
+	globalState.ReadUnlock()
 	w.(http.Flusher).Flush()
 }

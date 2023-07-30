@@ -44,28 +44,15 @@ func (ss *systemState) UpdateTime(serviceName string) {
 	ss.Services[serviceName].LastConnection = time.Now()
 }
 
-func (ss *systemState) GetServices() []Service {
-	ss.mutex.RLock()
-	defer ss.mutex.RUnlock()
-	services := make([]Service, len(ss.Services))
-	i := 0
-	for _, v := range ss.Services {
-		services[i] = *v
-	}
-	return services
-}
-
 func (ss *systemState) UpdateClientList(names []string) {
 	ss.mutex.Lock()
 	defer ss.mutex.Unlock()
 	copy(ss.ExpectedClients, names)
 
 }
-
-func (ss *systemState) GetAllClients() []string {
+func (ss *systemState) ReadLock() {
 	ss.mutex.RLock()
-	defer ss.mutex.RUnlock()
-	clients := make([]string, len(ss.ExpectedClients))
-	copy(clients, ss.ExpectedClients)
-	return clients
+}
+func (ss *systemState) ReadUnlock() {
+	ss.mutex.RUnlock()
 }
