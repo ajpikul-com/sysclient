@@ -8,7 +8,7 @@ import (
 	"github.com/ajpikul-com/wsssh/wsconn"
 )
 
-func ReadTexts(conn *wsconn.WSConn, name string) {
+func ReadTexts(conn *wsconn.WSConn) {
 	defaultLogger.Debug("Starting to read texts")
 	channel, _ := conn.SubscribeToTexts()
 	buffer := bytes.NewBuffer([]byte{})
