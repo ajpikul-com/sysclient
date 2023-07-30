@@ -11,11 +11,11 @@ import (
 
 func ReadAuthorizedKeys() {
 	// Right now it's doing this everytime, which is not great TODO
-	authorizedKeysBytes, err := os.ReadFile(clients)
+	authorizedKeysBytes, err := os.ReadFile(globalConfig.PublicKeys)
 	if err != nil {
 		panic("Failed to load auth keys file " + err.Error())
 	}
-	globalConfig.authorizedKeysMap := map[string]string{}
+	globalConfig.authorizedKeysMap = make(map[string]string)
 	for len(authorizedKeysBytes) > 0 {
 		pubKey, comment, _, rest, err := ssh.ParseAuthorizedKey(authorizedKeysBytes)
 		if err != nil {
@@ -25,8 +25,13 @@ func ReadAuthorizedKeys() {
 		authorizedKeysBytes = rest
 	}
 
-	// TODO we should update globa state with possible clients
-	globalClientList.UpdateClientList(possibleClients) // This probably needs to be processed, not sure what we accept
+	possibleClients := make([]string, len(globalConfig.authorizedKeysMap))
+	i := 0
+	for _, v := range globalConfig.authorizedKeysMap {
+		possibleClients[i] = v
+		i += 1
+	}
+	globalState.UpdateClientList(possibleClients) // This probably needs to be processed, not sure what we accept
 }
 
 func GetServer(wsconn *wsconn.WSConn, clients string, privateKey string) (*ssh.ServerConn, <-chan ssh.NewChannel, <-chan *ssh.Request, error) {

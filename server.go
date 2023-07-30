@@ -44,14 +44,15 @@ func ServeWSConn(w http.ResponseWriter, r *http.Request) {
 	defaultLogger.Info("Welcome, " + sshconn.Permissions.Extensions["comment"])
 
 	// Record connection
-	c := Client{
+	s := Service{
 		Name:      sshconn.Permissions.Extensions["comment"],
 		IPAddress: sshconn.RemoteAddr().String(),
+		Status:    true,
 	}
-	globalState.UpdateClient(c)
+	globalState.UpdateService(s)
 
 	// Start Reading Input From User
-	go ReadTexts(wsconn, c.Name)
+	go ReadTexts(wsconn, s.Name)
 	go ssh.DiscardRequests(reqs)
 	for _ = range chans {
 		// We're not accepting any session requests right now

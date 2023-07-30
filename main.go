@@ -27,8 +27,9 @@ func ReadTexts(conn *wsconn.WSConn, name string) {
 			panic(err.Error())
 		}
 		if commandService, ok := command.(Service); ok {
+			_ = commandService
 			// TODO okay write new service
-			globalState.UpdateService(name, commandService.Name, commandService.Status, commandService.LastConnection)
+			//globalState.UpdateService(name, commandService.Name, commandService.Status, commandService.LastConnection)
 			// We should be able to test the service at this point
 		} else {
 			panic("Command wasn't a Service type")
@@ -66,17 +67,14 @@ func main() {
 func writeSystemStatus(w http.ResponseWriter, r *http.Request) {
 	// If r.Method = GET/POST
 	payload := struct {
-		PossibleClients  []string
-		ConnectedClients []Client
+		ExpectedClients  []string
+		ConnectedClients []Service
 	}{
-		PossibleClients:  nil,
+		ExpectedClients:  nil,
 		ConnectedClients: nil,
 	}
-	payload.PossibleClients = globalClientList.GetAllClients()
-	payload.ConnectedClients = globalState.GetClientsCopy()
-	for i, v := range payload.ConnectedClients {
-		payload.ConnectedClients[i].LastConnectionParsed = time.Since(v.lastConnection).String()
-	}
+	payload.ExpectedClients = globalState.GetAllClients()
+	payload.ConnectedClients = globalState.GetServices()
 	jsonWrite := json.NewEncoder(w)
 	jsonWrite.SetEscapeHTML(true)
 	jsonWrite.Encode(payload)

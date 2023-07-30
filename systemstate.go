@@ -8,124 +8,64 @@ import (
 )
 
 type Service struct {
-	Name                 string
-	Status               bool
-	LastConnection       time.Time
-	LastConnectionParsed string
-}
-
-type Client struct {
-	Name                 string
-	IPAddress            string
-	lastConnection       time.Time
-	LastConnectionParsed string
-	Services             map[string]Service // Clients should be another service so we don't have to worry about copying embedded stuff
+	Name           string
+	IPAddress      string
+	Status         bool
+	ParentService  string
+	LastConnection time.Time
 }
 
 type systemState struct {
-	clients map[string]*Client
-	mutex   sync.RWMutex
+	Services        map[string]*Service
+	ExpectedClients []string
+	mutex           sync.RWMutex
 }
 
 func NewSystemState() *systemState {
 	ss := &systemState{
-		clients: make(map[string]*Client),
+		Services:        make(map[string]*Service),
+		ExpectedClients: make([]string, 0),
 	}
 	return ss
 }
 
-// Here's a problem, I don't want anyone to have direct access to any member
-// It's all mutexed. So assignments generally copy, but not always. Gotta remember to make sure it copies. or "deep copies"
-func (ss *systemState) UpdateClient(uC Client) { // this isn't good enough We need to unmarshall json
+func (ss *systemState) UpdateService(uS Service) {
 	ss.mutex.Lock()
 	defer ss.mutex.Unlock()
-	if _, ok := ss.clients[uC.Name]; !ok {
-		if uC.Services == nil {
-			uC.Services = make(map[string]Service)
-		}
-		ss.clients[uC.Name] = &uC
-	} else {
-		ss.clients[uC.Name].IPAddress = uC.IPAddress
-	}
-	ss.clients[uC.Name].lastConnection = time.Now() // This needs to be called on any communication
-}
-
-func (ss *systemState) UpdateService(client string, service string, status bool, time time.Time) {
-	ss.mutex.Lock()
-	defer ss.mutex.Unlock()
-	ss.clients[client].Services[service] = Service{
-		Name:           service,
-		Status:         status,
-		LastConnection: time,
+	ss.Services[uS.Name] = &uS
+	if ss.Services[uS.Name].LastConnection.IsZero() {
+		ss.Services[uS.Name].LastConnection = time.Now()
 	}
 }
 
-func (ss *systemState) UpdateTime(client string) {
+func (ss *systemState) UpdateTime(serviceName string) {
 	ss.mutex.Lock()
 	defer ss.mutex.Unlock()
-	ss.clients[client].lastConnection = time.Now()
+	ss.Services[serviceName].LastConnection = time.Now()
 }
 
-// TODO: add service
-func (ss *systemState) GetClientsCopy() []Client {
+func (ss *systemState) GetServices() []Service {
 	ss.mutex.RLock()
 	defer ss.mutex.RUnlock()
-	clients := make([]Client, len(ss.clients))
+	services := make([]Service, len(ss.Services))
 	i := 0
-	for _, v := range ss.clients {
-		clients[i] = *v
-		for k2, v2 := range v.Services {
-			clients[i].Services[k2] = v2
-		}
+	for _, v := range ss.Services {
+		services[i] = *v
 	}
+	return services
+}
+
+func (ss *systemState) UpdateClientList(names []string) {
+	ss.mutex.Lock()
+	defer ss.mutex.Unlock()
+	copy(ss.ExpectedClients, names)
+
+}
+
+func (ss *systemState) GetAllClients() []string {
+	ss.mutex.RLock()
+	defer ss.mutex.RUnlock()
+	clients := make([]string, len(ss.ExpectedClients))
+	copy(clients, ss.ExpectedClients)
 	return clients
 }
-
-type clientList struct {
-	names map[string]bool
-	mutex sync.RWMutex
-} // TODO POPULATE THIS
-
-func NewClientList(names []string) *clientList {
-	cL := make(map[string]bool)
-	for _, s := range names {
-		cL[s] = true
-	}
-	return &clientList{names: cL}
-}
-
-func (cl *clientList) UpdateClientList(names []string) {
-	newList := make(map[string]bool)
-	for _, s := range names {
-		newList[s] = true
-	}
-	cl.mutex.Lock()
-	defer cl.mutex.Unlock()
-	cl.names = newList
-
-}
-
-func (cl *clientList) CheckClient(name string) bool {
-	cl.mutex.RLock()
-	defer cl.mutex.RUnlock()
-	_, ok := cl.names[name]
-	return ok
-}
-
-func (cl *clientList) GetAllClients() []string {
-	cl.mutex.RLock()
-	allNames := make([]string, len(cl.names))
-	i := 0
-	defer cl.mutex.RUnlock()
-	for k, _ := range cl.names {
-		allNames[i] = k
-		i += 1
-	}
-	return allNames
-}
-
-// OKAY SO
-// This guy will have a list of relevant clients, that comes from reading public keys
-// He can compare it against the list of connected keys
-// This is starting to look a lot like RPC, since they have to communicate with the same structure
-// But they have to do it over an existing websockets connection? No, they don't.

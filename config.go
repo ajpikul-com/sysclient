@@ -6,19 +6,17 @@ import (
 )
 
 type config struct {
-	Hostname         string
-	PublicKeys       string
-	PrivateKey       string
-	authorizedKeyMap map[string]string
+	Hostname          string
+	PublicKeys        string
+	PrivateKey        string
+	authorizedKeysMap map[string]string
 }
 
-var globalConfig config          // This is the sysboss config
-var globalState *systemState     // This is the whol system state
-var globalClientList *clientList // This is the list of possible clients (we need to know this!) I think it should be added to global state
+var globalConfig config      // This is the sysboss config
+var globalState *systemState // This is the whol system state
 
 func initConfig() {
 	globalState = NewSystemState()
-	globalClientList = NewClientList([]string{}) // This needs to be somewhere else
 
 	configFile, err := os.Open("/home/ajp/systems/ajpikul.com_system/configs/sysboss.json")
 	if err != nil {
