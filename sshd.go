@@ -28,9 +28,11 @@ func ReadAuthorizedKeys() {
 	possibleClients := make([]string, len(globalConfig.authorizedKeysMap))
 	i := 0
 	for _, v := range globalConfig.authorizedKeysMap {
+		defaultLogger.Debug("Possible client: " + v)
 		possibleClients[i] = v
 		i += 1
 	}
+	defaultLogger.Debug("Trying to update clients")
 	globalState.UpdateClientList(possibleClients) // This probably needs to be processed, not sure what we accept
 }
 
