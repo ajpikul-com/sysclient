@@ -38,7 +38,7 @@ func ReadAuthorizedKeys() {
 
 func GetServer(wsconn *wsconn.WSConn, clients string, privateKey string) (*ssh.ServerConn, <-chan ssh.NewChannel, <-chan *ssh.Request, error) {
 
-	ReadAuthorizedKeys() // This isn't good to have here!
+	ReadAuthorizedKeys() // This isn't good to have here! Race conditions! Should only happen change! TODO! Should be part of config!
 
 	config := &ssh.ServerConfig{
 		PublicKeyCallback: func(c ssh.ConnMetadata, pubKey ssh.PublicKey) (*ssh.Permissions, error) {
