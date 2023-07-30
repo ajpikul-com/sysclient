@@ -44,10 +44,10 @@ func ServeWSConn(w http.ResponseWriter, r *http.Request) {
 	defaultLogger.Info("Welcome, " + sshconn.Permissions.Extensions["comment"])
 
 	// Record connection
-	s := Service{
+	s := Service{ // Server never updates itself
 		Name:      sshconn.Permissions.Extensions["comment"],
 		IPAddress: sshconn.RemoteAddr().String(),
-		Status:    true,
+		Status:    "Online",
 	}
 	globalState.UpdateService(s)
 

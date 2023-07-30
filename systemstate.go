@@ -7,10 +7,10 @@ import (
 	"time"
 )
 
-type Service struct {
+type Service struct { // Is this not a protobuff
 	Name           string
 	IPAddress      string
-	Status         bool
+	Status         string
 	ParentService  string
 	LastConnection time.Time
 }
