@@ -45,6 +45,7 @@ func (ss *systemState) UpdateTime(serviceName string) {
 }
 
 func (ss *systemState) UpdateClientList(names []string) {
+	defaultLogger.Debug(names[0])
 	ss.mutex.Lock()
 	defer ss.mutex.Unlock()
 	copy(ss.ExpectedClients, names)

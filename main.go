@@ -14,7 +14,6 @@ func init() {
 }
 
 func main() {
-	initConfig()
 	m := mux.NewRouter()
 	// Add two gets here. Why are we using mux? I don't know
 	m.HandleFunc("/", ServeWSConn)
