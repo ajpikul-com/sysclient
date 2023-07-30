@@ -56,3 +56,5 @@ func (ss *systemState) ReadLock() {
 func (ss *systemState) ReadUnlock() {
 	ss.mutex.RUnlock()
 }
+
+// TODO: maybe if we do a JSONMarshal function we don't need to call these manually
