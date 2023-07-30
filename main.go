@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
 	"time"
@@ -9,25 +10,29 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func WriteText(conn *wsconn.WSConn) {
-	for {
-		_, err := conn.WriteText([]byte("Test Message")) // TODO Can we be sure this will write everything
-		if err != nil {
-			defaultLogger.Error("wsconn.WriteText(): " + err.Error())
-			break
-		}
-		time.Sleep(1000 * time.Millisecond)
-	}
-}
-
-func ReadTexts(conn *wsconn.WSConn) {
+func ReadTexts(conn *wsconn.WSConn, name string) {
 	defaultLogger.Debug("Starting to read texts")
 	channel, _ := conn.SubscribeToTexts()
+	buffer := bytes.NewBuffer([]byte{})
+	commandDecoder := json.NewDecoder(buffer)
+	go func() {
+		var command interface{}
+		err := commandDecoder.Decode(command) // what happens if the buffer isn't complete json currenlty
+		if err != nil {
+			panic(err.Error())
+		}
+		if commandService, ok := command.(Service); ok {
+			// TODO okay write new service
+			globalState.UpdateService(name, commandService.Name, commandService.Status, commandService.LastConnection)
+			// We should be able to test the service at this point
+		} else {
+			panic("Command wasn't a Service type")
+		}
+	}()
 	for s := range channel {
-		defaultLogger.Info("ReadTexts: " + s)
+		buffer.WriteString(s)
 	}
 	defaultLogger.Debug("ReadTexts Channel Closed")
-	// The channel has been closed by someone else
 }
 
 func main() {

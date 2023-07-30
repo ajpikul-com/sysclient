@@ -11,7 +11,6 @@ type config struct {
 	PrivateKey string
 }
 
-// b, err := json.Marshal(instance of config)
 var globalConfig config
 var globalState *systemState
 var globalClientList *clientList

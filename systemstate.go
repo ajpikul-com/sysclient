@@ -10,7 +10,7 @@ import (
 type Service struct {
 	Name                 string
 	Status               bool
-	lastConnection       time.Time
+	LastConnection       time.Time
 	LastConnectionParsed string
 }
 
@@ -56,7 +56,7 @@ func (ss *systemState) UpdateService(client string, service string, status bool,
 	ss.clients[client].Services[service] = Service{
 		Name:           service,
 		Status:         status,
-		lastConnection: time,
+		LastConnection: time,
 	}
 }
 

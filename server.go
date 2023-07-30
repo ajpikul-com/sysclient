@@ -44,7 +44,7 @@ func ServeWSConn(w http.ResponseWriter, r *http.Request) {
 		IPAddress: sshconn.RemoteAddr().String(),
 	}
 	globalState.UpdateClient(c)
-	go ReadTexts(wsconn)
+	go ReadTexts(wsconn, c.Name)
 	go ssh.DiscardRequests(reqs)
 	for _ = range chans {
 		// We do nothing for you
