@@ -11,14 +11,14 @@ type config struct {
 	PrivateKey string
 }
 
-var globalConfig config
-var globalState *systemState
-var globalClientList *clientList
+var globalConfig config          // This is the sysboss config
+var globalState *systemState     // This is the whol system state
+var globalClientList *clientList // This is the list of possible clients (we need to know this!) I think it should be added to global state
 
 func initConfig() {
 	globalState = NewSystemState()
-	globalClientList = NewClientList([]string{})
-	// globalClientList = NewClientList() // We actually don't know yet
+	globalClientList = NewClientList([]string{}) // This needs to be somewhere else
+
 	configFile, err := os.Open("/home/ajp/systems/ajpikul.com_system/configs/sysboss.json")
 	if err != nil {
 		panic(err.Error())

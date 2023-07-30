@@ -10,6 +10,7 @@ import (
 )
 
 func ServeWSConn(w http.ResponseWriter, r *http.Request) {
+	// BUILD CONNECTION
 	defaultLogger.Debug("Server: Incoming Req: " + r.Host + ", " + r.URL.Path)
 	upgrader := &websocket.Upgrader{CheckOrigin: func(r *http.Request) bool {
 		return true
@@ -23,7 +24,7 @@ func ServeWSConn(w http.ResponseWriter, r *http.Request) {
 	}
 	wsconn, err := wsconn.New(gorrilaconn)
 	if err != nil {
-		panic(err.Error()) // This actually is very severe
+		panic(err.Error())
 	}
 	defer func() {
 		defaultLogger.Debug("Closing WSConn")
@@ -43,7 +44,9 @@ func ServeWSConn(w http.ResponseWriter, r *http.Request) {
 		Name:      sshconn.Permissions.Extensions["comment"],
 		IPAddress: sshconn.RemoteAddr().String(),
 	}
+	// Record Connection
 	globalState.UpdateClient(c)
+	// Start Reading Connections
 	go ReadTexts(wsconn, c.Name)
 	go ssh.DiscardRequests(reqs)
 	for _ = range chans {

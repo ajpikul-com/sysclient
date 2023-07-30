@@ -7,7 +7,7 @@ import (
 
 var defaultLogger ilog.LoggerInterface
 
-func init() {
+func initLogger() {
 	defaultLogger = &ilog.SimpleLogger{}
 	err := defaultLogger.Init()
 	if err != nil {

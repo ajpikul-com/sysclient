@@ -10,6 +10,11 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func init() {
+	initLogger()
+	initConfig()
+}
+
 func ReadTexts(conn *wsconn.WSConn, name string) {
 	defaultLogger.Debug("Starting to read texts")
 	channel, _ := conn.SubscribeToTexts()
