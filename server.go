@@ -10,18 +10,17 @@ import (
 )
 
 func ServeWSConn(w http.ResponseWriter, r *http.Request) {
-	// BUILD CONNECTION
 	defaultLogger.Debug("Server: Incoming Req: " + r.Host + ", " + r.URL.Path)
-	upgrader := &websocket.Upgrader{CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
-	}
+
+	// Create websockets connection
+	upgrader := &websocket.Upgrader{CheckOrigin: func(r *http.Request) bool { return true }}
 	gorrilaconn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		defaultLogger.Error("Upgrade: " + err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 	wsconn, err := wsconn.New(gorrilaconn)
 	if err != nil {
 		panic(err.Error())
@@ -34,24 +33,30 @@ func ServeWSConn(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
+	// Attach ssh to websockets
 	sshconn, chans, reqs, err := GetServer(wsconn, globalConfig.PublicKeys, globalConfig.PrivateKey)
 	if err != nil {
 		defaultLogger.Error("GetServer(): " + err.Error())
 		return
 	}
+
+	// User must have been legit
 	defaultLogger.Info("Welcome, " + sshconn.Permissions.Extensions["comment"])
+
+	// Record connection
 	c := Client{
 		Name:      sshconn.Permissions.Extensions["comment"],
 		IPAddress: sshconn.RemoteAddr().String(),
 	}
-	// Record Connection
 	globalState.UpdateClient(c)
-	// Start Reading Connections
+
+	// Start Reading Input From User
 	go ReadTexts(wsconn, c.Name)
 	go ssh.DiscardRequests(reqs)
 	for _ = range chans {
-		// We do nothing for you
-		// Otherwise it just stays open until client closes
+		// We're not accepting any session requests right now
+		// I would like to see if server can act as client as well
 	}
+
 	defaultLogger.Info(sshconn.Permissions.Extensions["comment"] + " disconnected")
 }
