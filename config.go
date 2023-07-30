@@ -6,9 +6,10 @@ import (
 )
 
 type config struct {
-	Hostname   string
-	PublicKeys string
-	PrivateKey string
+	Hostname         string
+	PublicKeys       string
+	PrivateKey       string
+	authorizedKeyMap map[string]string
 }
 
 var globalConfig config          // This is the sysboss config

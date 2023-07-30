@@ -9,31 +9,34 @@ import (
 	"github.com/ajpikul-com/wsssh/wsconn"
 )
 
-func GetServer(wsconn *wsconn.WSConn, clients string, privateKey string) (*ssh.ServerConn, <-chan ssh.NewChannel, <-chan *ssh.Request, error) {
-
+func ReadAuthorizedKeys() {
 	// Right now it's doing this everytime, which is not great TODO
 	authorizedKeysBytes, err := os.ReadFile(clients)
 	if err != nil {
 		panic("Failed to load auth keys file " + err.Error())
 	}
-	authorizedKeysMap := map[string]string{}
-	// TODO this really shouldn't be here
-	possibleClients := make([]string, 0)
-	//
+	globalConfig.authorizedKeysMap := map[string]string{}
 	for len(authorizedKeysBytes) > 0 {
 		pubKey, comment, _, rest, err := ssh.ParseAuthorizedKey(authorizedKeysBytes)
 		if err != nil {
 			panic(err.Error())
 		}
-		authorizedKeysMap[string(pubKey.Marshal())] = comment
-		possibleClients = append(possibleClients, comment)
+		globalConfig.authorizedKeysMap[string(pubKey.Marshal())] = comment
 		authorizedKeysBytes = rest
 	}
-	globalClientList.UpdateClientList(possibleClients)
+
+	// TODO we should update globa state with possible clients
+	globalClientList.UpdateClientList(possibleClients) // This probably needs to be processed, not sure what we accept
+}
+
+func GetServer(wsconn *wsconn.WSConn, clients string, privateKey string) (*ssh.ServerConn, <-chan ssh.NewChannel, <-chan *ssh.Request, error) {
+
+	ReadAuthorizedKeys() // This isn't good to have here!
+
 	config := &ssh.ServerConfig{
 		PublicKeyCallback: func(c ssh.ConnMetadata, pubKey ssh.PublicKey) (*ssh.Permissions, error) {
 			defaultLogger.Debug("Running Public Key Callback")
-			comment, ok := authorizedKeysMap[string(pubKey.Marshal())]
+			comment, ok := globalConfig.authorizedKeysMap[string(pubKey.Marshal())]
 			if ok {
 				return &ssh.Permissions{
 					Extensions: map[string]string{
