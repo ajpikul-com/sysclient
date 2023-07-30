@@ -13,7 +13,6 @@ func ReadTexts(conn *wsconn.WSConn, name string) {
 	channel, _ := conn.SubscribeToTexts()
 	buffer := bytes.NewBuffer([]byte{})
 	for s := range channel {
-		globalState.UpdateTime(name)
 		buffer.WriteString(s) // we've received new input
 		commandDecoder := json.NewDecoder(buffer)
 		for {
@@ -34,9 +33,6 @@ func ReadTexts(conn *wsconn.WSConn, name string) {
 
 // TODO: better to use a multireader instead of copy, will also help us if there is anything left over in the buffer after decode, instead of assumign decode takes all
 func processCommand(command interface{}) {
-	if commandService, ok := command.(Service); ok {
-		globalState.UpdateService(commandService)
-	} else {
-		panic("Command was weird type")
-	}
+	// This needs to switch on an interface type
+	defaultLogger.Error("Command was weird type")
 }

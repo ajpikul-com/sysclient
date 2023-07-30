@@ -6,19 +6,15 @@ import (
 )
 
 type config struct {
-	Hostname          string
-	PublicKeys        string
-	PrivateKey        string
-	authorizedKeysMap map[string]string
+	Hostname   string
+	PrivateKey string
 }
 
-var globalConfig config      // This is the sysboss config
-var globalState *systemState // This is the whol system state
+var globalConfig config // This is the sysboss config
 
 func initConfig() {
-	globalState = NewSystemState()
 
-	configFile, err := os.Open("/home/ajp/systems/ajpikul.com_system/configs/sysboss.json")
+	configFile, err := os.Open("/home/ajp/systems/sysclient/sysclient.json")
 	if err != nil {
 		panic(err.Error())
 	}

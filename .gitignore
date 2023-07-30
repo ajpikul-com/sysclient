@@ -20,3 +20,4 @@ gerbers/
 *.local
 *.official
 sysboss
+sysclient

@@ -1,4 +1,4 @@
-module github.com/ajpikul-com/sysboss
+module github.com/ajpikul-com/sysclient
 
 go 1.20
 
