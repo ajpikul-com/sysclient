@@ -32,6 +32,7 @@ func ReadTexts(conn *wsconn.WSConn, name string) {
 	defaultLogger.Debug("ReadTexts Channel Closed")
 }
 
+// TODO: better to use a multireader instead of copy, will also help us if there is anything left over in the buffer after decode, instead of assumign decode takes all
 func processCommand(command interface{}) {
 	if commandService, ok := command.(Service); ok {
 		globalState.UpdateService(commandService)
