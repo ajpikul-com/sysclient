@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"net/http"
 	"os"
 	"os/signal"
 	"sync"
@@ -20,10 +21,18 @@ func WriteText(conn *wsconn.WSConn) {
 	for {
 		// So what we're going to do here
 		for _, v := range globalConfig.Services {
-			// TODO check to see if they are actually online
+			status := "Offline"
+			if v.Module == "GET" {
+				res, err := http.Get(v.URL)
+				if err != nil {
+					status = err.Error()
+				} else if res.StatusCode == http.StatusOK {
+					status = "Online"
+				}
+			}
 			payload := &Service{ // Is this not a protobuff
 				Name:           v.Name,
-				Status:         "Online",
+				Status:         status,
 				ParentService:  globalConfig.MyName,
 				LastConnection: time.Now(),
 			}
