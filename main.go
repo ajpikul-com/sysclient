@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/ajpikul-com/gitstatus"
 	"github.com/ajpikul-com/wsssh/wsconn"
 	gws "github.com/gorilla/websocket"
 )
@@ -15,12 +16,18 @@ import (
 func init() {
 	initLogger()
 	initConfig()
+
+	gitstatus.InitDataStore(globalConfig.GitService.DataStore)
+	gitstatus.UpdateRepos()
+
 }
 
 func WriteText(conn *wsconn.WSConn) {
+	gitI := 0
 	for {
 		// So what we're going to do here
-		for _, v := range globalConfig.Services {
+		defaultLogger.Debug("Iterating over get services")
+		for _, v := range globalConfig.GetServices {
 			status := "Offline"
 			if v.Module == "GET" {
 				res, err := http.Get(v.URL)
@@ -30,25 +37,47 @@ func WriteText(conn *wsconn.WSConn) {
 					status = "Online"
 				}
 			}
-			payload := &Service{ // Is this not a protobuff
-				Name:           v.Name,
-				Status:         status,
-				ParentService:  globalConfig.MyName,
-				LastConnection: time.Now(),
-			}
+			payload := map[string]*Service{
+				"get": &Service{ // Is this not a protobuff
+					Name:           v.Name,
+					Status:         status,
+					ParentService:  globalConfig.MyName,
+					LastConnection: time.Now(),
+				}}
 			b, err := json.Marshal(payload)
 			defaultLogger.Debug(string(b))
 			if err != nil {
 				defaultLogger.Error(err.Error())
 				continue // skip this service
 			}
+			defaultLogger.Debug("Writing")
 			_, err = conn.WriteText(b) // TODO Can we be sure this will write everything
 			if err != nil {
 				defaultLogger.Error("wsconn.WriteText(): " + err.Error())
 				break
 			}
-
 		}
+		if gitI == 0 {
+			defaultLogger.Debug("In git")
+			repostates := gitstatus.VerifyRepos() // payload is a map of gitstatus.RepoStates, we will occasionally send it
+
+			payload := map[string]map[string]gitstatus.RepoState{
+				"git": repostates}
+			b, err := json.Marshal(payload)
+			defaultLogger.Debug(string(b))
+			if err != nil {
+				defaultLogger.Error(err.Error())
+				continue // skip this service
+			}
+			defaultLogger.Debug("Writing")
+			_, err = conn.WriteText(b) // TODO Can we be sure this will write everything
+			if err != nil {
+				defaultLogger.Error("wsconn.WriteText(): " + err.Error())
+				break
+			}
+			gitI = 5
+		}
+		gitI -= 1
 		time.Sleep(5 * time.Minute)
 	}
 }

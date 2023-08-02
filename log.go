@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/ajpikul-com/gitstatus"
 	"github.com/ajpikul-com/ilog"
 	"github.com/ajpikul-com/wsssh/wsconn"
 )
@@ -15,4 +16,5 @@ func initLogger() {
 		panic(err)
 	}
 	wsconn.SetDefaultLogger(defaultLogger)
+	gitstatus.SetDefaultLogger(defaultLogger)
 }

@@ -5,18 +5,24 @@ import (
 	"os"
 )
 
-type ServiceConfigs struct {
+type GetServices struct {
 	Name   string
 	URL    string
 	Module string
 }
 
+type GitServices struct {
+	DataStore string
+	Module    string
+}
+
 type config struct {
-	MyName     string
-	Hostname   string
-	PrivateKey string
-	HostKey    string
-	Services   []ServiceConfigs
+	MyName      string
+	Hostname    string
+	PrivateKey  string
+	HostKey     string
+	GetServices []GetServices
+	GitService  GitServices
 }
 
 var globalConfig config // This is the sysboss config
