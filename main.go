@@ -64,6 +64,7 @@ func WriteText(conn *wsconn.WSConn) {
 			payload := map[string]map[string]gitstatus.RepoState{
 				"git": repostates}
 			b, err := json.Marshal(payload)
+			defaultLogger.Debug("About to send")
 			defaultLogger.Debug(string(b))
 			if err != nil {
 				defaultLogger.Error(err.Error())
