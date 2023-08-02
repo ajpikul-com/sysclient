@@ -10,7 +10,7 @@ var defaultLogger ilog.LoggerInterface
 
 func initLogger() {
 	defaultLogger = &ilog.SimpleLogger{}
-	defaultLogger.(*ilog.SimpleLogger).Level(ilog.DEBUG)
+	defaultLogger.(*ilog.SimpleLogger).Level(ilog.INFO)
 	err := defaultLogger.Init()
 	if err != nil {
 		panic(err)
