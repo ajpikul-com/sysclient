@@ -76,10 +76,10 @@ func WriteText(conn *wsconn.WSConn) {
 				defaultLogger.Error("wsconn.WriteText(): " + err.Error())
 				break
 			}
-			gitI = 5
+			gitI = 2
 		}
 		gitI -= 1
-		time.Sleep(5 * time.Minute)
+		time.Sleep(2 * time.Minute)
 	}
 }
 
