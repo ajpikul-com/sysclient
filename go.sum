@@ -7,8 +7,8 @@ github.com/ProtonMail/go-crypto v0.0.0-20230717121422-5aa5874ade95 h1:KLq8BE0KwC
 github.com/ProtonMail/go-crypto v0.0.0-20230717121422-5aa5874ade95/go.mod h1:EjAoLdwvbIOoOQr3ihjnSoLZRtE8azugULFRteWMNc0=
 github.com/acomagu/bufpipe v1.0.4 h1:e3H4WUzM3npvo5uv95QuJM3cQspFNtFBzvJ2oNjKIDQ=
 github.com/acomagu/bufpipe v1.0.4/go.mod h1:mxdxdup/WdsKVreO5GpW4+M/1CE2sMG4jeGJ2sYmHc4=
-github.com/ajpikul-com/gitstatus v0.0.0-20230802173100-951a97863e23 h1:kkQUFHBsPtYZNFoCtwdVc46WgAbn4N1r9o/X5Sn30pA=
-github.com/ajpikul-com/gitstatus v0.0.0-20230802173100-951a97863e23/go.mod h1:48G7zIXtrlzlQdmvp7II2omic0eN860X+zPc8yL6/Ko=
+github.com/ajpikul-com/gitstatus v0.0.0-20230802210831-bb3101d739e0 h1:+QRhg2FIKagtvhZpKW1+2XJWpZBqJcJSY8MYJZB17FM=
+github.com/ajpikul-com/gitstatus v0.0.0-20230802210831-bb3101d739e0/go.mod h1:48G7zIXtrlzlQdmvp7II2omic0eN860X+zPc8yL6/Ko=
 github.com/ajpikul-com/ilog v0.0.0-20230725152811-6d417358332d/go.mod h1:xSmkTWT+APtO6ZsnlK54Z12Gxa6AFnwtUOx1r7g0njw=
 github.com/ajpikul-com/ilog v0.0.0-20230802005115-88d039e2c7e6 h1:vDNaQ1XzZJGOc4Ht8CDqTsNJCiN4EWdE9cG8yg4xkAg=
 github.com/ajpikul-com/ilog v0.0.0-20230802005115-88d039e2c7e6/go.mod h1:xSmkTWT+APtO6ZsnlK54Z12Gxa6AFnwtUOx1r7g0njw=
