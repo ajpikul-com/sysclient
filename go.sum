@@ -7,10 +7,8 @@ github.com/ProtonMail/go-crypto v0.0.0-20230717121422-5aa5874ade95 h1:KLq8BE0KwC
 github.com/ProtonMail/go-crypto v0.0.0-20230717121422-5aa5874ade95/go.mod h1:EjAoLdwvbIOoOQr3ihjnSoLZRtE8azugULFRteWMNc0=
 github.com/acomagu/bufpipe v1.0.4 h1:e3H4WUzM3npvo5uv95QuJM3cQspFNtFBzvJ2oNjKIDQ=
 github.com/acomagu/bufpipe v1.0.4/go.mod h1:mxdxdup/WdsKVreO5GpW4+M/1CE2sMG4jeGJ2sYmHc4=
-github.com/ajpikul-com/gitstatus v0.0.0-20230802233321-bcfccfdba368 h1:sVLckrmCKV4BU+AyzfdBVgdjFVErIGhDeHlggfmcwuo=
-github.com/ajpikul-com/gitstatus v0.0.0-20230802233321-bcfccfdba368/go.mod h1:48G7zIXtrlzlQdmvp7II2omic0eN860X+zPc8yL6/Ko=
-github.com/ajpikul-com/gitstatus v0.0.0-20230802233525-b1f157fdafbc h1:cdi1TYFlcox5ECV9GHh+7QOtnIiWe/9Nwq0wT0rKbbI=
-github.com/ajpikul-com/gitstatus v0.0.0-20230802233525-b1f157fdafbc/go.mod h1:x0XyUtleC/d00QaFHh3QaWXrRUUYacDT7i2Hh9B0Bgo=
+github.com/ajpikul-com/gitstatus v0.0.0-20230803171647-a6b1e70ed5ac h1:un0ZMWhWQba+HCyexFUs4p2PQcINHbwXR8gwxeaP2EI=
+github.com/ajpikul-com/gitstatus v0.0.0-20230803171647-a6b1e70ed5ac/go.mod h1:x0XyUtleC/d00QaFHh3QaWXrRUUYacDT7i2Hh9B0Bgo=
 github.com/ajpikul-com/ilog v0.0.0-20230725152811-6d417358332d/go.mod h1:xSmkTWT+APtO6ZsnlK54Z12Gxa6AFnwtUOx1r7g0njw=
 github.com/ajpikul-com/ilog v0.0.0-20230802005115-88d039e2c7e6 h1:vDNaQ1XzZJGOc4Ht8CDqTsNJCiN4EWdE9cG8yg4xkAg=
 github.com/ajpikul-com/ilog v0.0.0-20230802005115-88d039e2c7e6/go.mod h1:xSmkTWT+APtO6ZsnlK54Z12Gxa6AFnwtUOx1r7g0njw=
@@ -41,6 +39,7 @@ github.com/go-git/go-git/v5 v5.8.1/go.mod h1:FHFuoD6yGz5OSKEBK+aWN9Oah0q54Jxl0ab
 github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da h1:oI5xCqsCo564l8iNU+DwB5epxmsaqB+rhGL0m5jtYqE=
 github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da/go.mod h1:cIg4eruTrX1D+g88fzRXU5OdNfaM+9IcxsU14FzY7Hc=
 github.com/google/go-cmp v0.5.9 h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=
+github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 h1:El6M4kTTCOh6aBiKaUGG7oYTSPP8MxqL4YI3kZKwcP4=
 github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510/go.mod h1:pupxD2MaaD3pAXIBCelhxNneeOaAeabZDe5s4K6zSpQ=
 github.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWmnc=
 github.com/gorilla/websocket v1.5.0/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
@@ -178,8 +177,6 @@ gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8
 gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c h1:Hei/4ADfdWqJk1ZMxUNpqntNwaWcugrBjAiHlqqRiVk=
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c/go.mod h1:JHkPIbrfpd72SG/EVd6muEfDQjcINNoR0C8j2r3qZ4Q=
-gopkg.in/libgit2/git2go.v24 v24.6.0 h1:PbP6FpyR+RP4ae2cmhGoHVLkQ2y5c+cmXoNMUv7/0aU=
-gopkg.in/libgit2/git2go.v24 v24.6.0/go.mod h1:0oj7qVgqgium/htLwlhi/LlNu6mfbR76GnLz6B3B550=
 gopkg.in/warnings.v0 v0.1.2 h1:wFXVbFY8DY5/xOe1ECiWdKCzZlxgshcYVNkBHstARME=
 gopkg.in/warnings.v0 v0.1.2/go.mod h1:jksf8JmL6Qr/oQM2OXTHunEvvTAsrWBLb6OOjuVWRNI=
 gopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=

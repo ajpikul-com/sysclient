@@ -2,8 +2,10 @@ module github.com/ajpikul-com/sysclient
 
 go 1.20
 
+replace github.com/ajpikul-com/gitstatus => github.com/ajpikul-com/gitstatus v0.0.0-20230803171647-a6b1e70ed5ac
+
 require (
-	github.com/ajpikul-com/gitstatus v0.0.0-20230802233525-b1f157fdafbc
+	github.com/ajpikul-com/gitstatus v0.0.0-20230803171729-1371ac366b56
 	github.com/ajpikul-com/ilog v0.0.0-20230802005115-88d039e2c7e6
 	github.com/ajpikul-com/wsssh/wsconn v0.0.0-20230731054624-00ee570e4f8a
 	github.com/gorilla/websocket v1.5.0
@@ -34,6 +36,5 @@ require (
 	golang.org/x/net v0.13.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
 	golang.org/x/tools v0.11.1 // indirect
-	gopkg.in/libgit2/git2go.v24 v24.6.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )
