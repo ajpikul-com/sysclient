@@ -54,7 +54,7 @@ func WriteText(conn *wsconn.WSConn) {
 			_, err = conn.WriteText(b) // TODO Can we be sure this will write everything
 			if err != nil {
 				defaultLogger.Error("wsconn.WriteText(): " + err.Error())
-				break
+				return
 			}
 		}
 		if gitI == 0 {
@@ -74,7 +74,7 @@ func WriteText(conn *wsconn.WSConn) {
 			_, err = conn.WriteText(b) // TODO Can we be sure this will write everything
 			if err != nil {
 				defaultLogger.Error("wsconn.WriteText(): " + err.Error())
-				break
+				return
 			}
 			gitI = 2
 		}
