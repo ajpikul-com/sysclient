@@ -3,7 +3,7 @@ module github.com/ajpikul-com/sysclient
 go 1.20
 
 require (
-	github.com/ajpikul-com/gitstatus v0.0.0-20230802233321-bcfccfdba368
+	github.com/ajpikul-com/gitstatus v0.0.0-20230803171729-1371ac366b56
 	github.com/ajpikul-com/ilog v0.0.0-20230802005115-88d039e2c7e6
 	github.com/ajpikul-com/wsssh/wsconn v0.0.0-20230731054624-00ee570e4f8a
 	github.com/gorilla/websocket v1.5.0
