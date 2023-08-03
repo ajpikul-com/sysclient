@@ -3,7 +3,7 @@ module github.com/ajpikul-com/sysclient
 go 1.20
 
 require (
-	github.com/ajpikul-com/gitstatus v0.0.0-20230802233321-bcfccfdba368
+	github.com/ajpikul-com/gitstatus v0.0.0-20230802233525-b1f157fdafbc
 	github.com/ajpikul-com/ilog v0.0.0-20230802005115-88d039e2c7e6
 	github.com/ajpikul-com/wsssh/wsconn v0.0.0-20230731054624-00ee570e4f8a
 	github.com/gorilla/websocket v1.5.0
@@ -23,6 +23,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
+	github.com/libgit2/git2go/v34 v34.0.0 // indirect
 	github.com/pjbgf/sha1cd v0.3.0 // indirect
 	github.com/sergi/go-diff v1.3.1 // indirect
 	github.com/skeema/knownhosts v1.2.0 // indirect
