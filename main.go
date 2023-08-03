@@ -27,21 +27,22 @@ func WriteText(conn *wsconn.WSConn) {
 	for {
 		// So what we're going to do here
 		defaultLogger.Debug("Iterating over get services")
-
-		payload := map[string]*Service{
-			"clearget": nil,
-		}
-		b, err := json.Marshal(payload)
-		defaultLogger.Debug(string(b))
-		if err != nil {
-			defaultLogger.Error(err.Error())
-			continue // skip this service
-		}
-		defaultLogger.Debug("Writing")
-		_, err = conn.WriteText(b) // TODO Can we be sure this will write everything
-		if err != nil {
-			defaultLogger.Error("wsconn.WriteText(): " + err.Error())
-			return
+		if true {
+			payload := map[string]string{
+				"clearget": "nil",
+			}
+			b, err := json.Marshal(payload)
+			defaultLogger.Debug(string(b))
+			if err != nil {
+				defaultLogger.Error(err.Error())
+				continue // skip this service
+			}
+			defaultLogger.Debug("Writing")
+			_, err = conn.WriteText(b) // TODO Can we be sure this will write everything
+			if err != nil {
+				defaultLogger.Error("wsconn.WriteText(): " + err.Error())
+				return
+			}
 		}
 
 		for _, v := range globalConfig.GetServices {
