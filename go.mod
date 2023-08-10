@@ -2,7 +2,7 @@ module github.com/ajpikul-com/sysclient
 
 go 1.20
 
-replace github.com/ajpikul-com/gitstatus => github.com/ajpikul-com/gitstatus v0.0.0-20230803171647-a6b1e70ed5ac
+replace github.com/ajpikul-com/gitstatus => github.com/ajpikul-com/gitstatus v0.0.0-20230809193352-170b963eff90
 
 require (
 	github.com/ajpikul-com/gitstatus v0.0.0-20230809193334-3be8c9186b2d
